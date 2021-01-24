@@ -333,7 +333,7 @@ bool IsChromeProcess(pid_t pid) {
 // A helper class to hold onto a socket.
 class ScopedSocket {
  public:
-  ScopedSocket() : fd_(-1) { Reset(); }
+  ScopedSocket() { Reset(); }
   ~ScopedSocket() { Close(); }
   int fd() { return fd_; }
   void Reset() {
@@ -347,7 +347,7 @@ class ScopedSocket {
   }
 
  private:
-  int fd_;
+  int fd_ = -1;
 };
 
 // Returns a random string for uniquifying profile connections.
@@ -473,10 +473,7 @@ class ProcessSingleton::LinuxWatcher
     SocketReader(ProcessSingleton::LinuxWatcher* parent,
                  scoped_refptr<base::SingleThreadTaskRunner> ui_task_runner,
                  int fd)
-        : parent_(parent),
-          ui_task_runner_(ui_task_runner),
-          fd_(fd),
-          bytes_read_(0) {
+        : parent_(parent), ui_task_runner_(ui_task_runner), fd_(fd) {
       DCHECK_CURRENTLY_ON(BrowserThread::IO);
       // Wait for reads.
       fd_watch_controller_ = base::FileDescriptorWatcher::WatchReadable(
@@ -521,7 +518,7 @@ class ProcessSingleton::LinuxWatcher
 
     // Tracks the number of bytes we've read in case we're getting partial
     // reads.
-    size_t bytes_read_;
+    size_t bytes_read_ = 0;
 
     base::OneShotTimer timer_;
 

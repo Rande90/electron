@@ -129,8 +129,9 @@ class ProcessSingleton {
 #if defined(OS_WIN)
   HWND remote_window_;               // The HWND_MESSAGE of another browser.
   base::win::MessageWindow window_;  // The message-only window.
-  bool is_virtualized_;  // Stuck inside Microsoft Softricity VM environment.
-  HANDLE lock_file_;
+  bool is_virtualized_ =
+      false;  // Stuck inside Microsoft Softricity VM environment.
+  HANDLE lock_file_ = INVALID_HANDLE_VALUE;
   base::FilePath user_data_dir_;
   ShouldKillRemoteProcessCallback should_kill_remote_process_callback_;
 #elif defined(OS_POSIX) && !defined(OS_ANDROID)
